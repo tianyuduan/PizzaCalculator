@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <canvas id="confeti" class="active"></canvas>
+  <title>First World Pizza Problem Solver</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="main.css">
+  <script type="text/javascript" src="http://www.cornify.com/js/cornify.js"></script>
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <h1 id="logo"><a href="index.html">Pizza Value Calculator </a></h1>
+<form name="calculator">
+         <table>
+            <tr>
+              <td colspan="4">
+                <div > Enter the price of Pizza (S) </div>
+                <input type="text" name="displayS" value="13.99" id="displayS" >
+                <div> Enter number of inches </div>
+                <input type="text" name="displayInchS" value="10" id="displayInchS" >
+                <div> Output in Inch ^ 2 per Dollar </div>
+                 <input type="text" name="displayOutputS" id="displayOutputS" >
+              </td>
+              <td colspan="4">
+                <div> Enter the price of Pizza (M) </div>
+                <input type="text" name="displayM" value="18.99"id="displayM" >
+                <div> Enter number of inches </div>
+                <input type="text" name="displayInchM" value="12" id="displayInchM" >
+                <div> Output in Inch ^ 2 per Dollar </div>
+                 <input type="text" name="displayOutputM" id="displayOutputM" >
+              </td>
+              <td colspan="4">
+                <div> Enter the price of Pizza (L) </div>
+                <input type="text" name="displayL" value="21.99" id="displayL" >
+                <div> Enter number of inches </div>
+                <input type="text" name="displayInchL" value="16" id="displayInchL" >
+                <div> Output in Inch ^ 2 per Dollar </div>
+                 <input type="text" name="displayOutputL" id="displayOutputL" >
+              </td>
+            </tr>
+            <tr>
+         </table>
+         <div id="buttonCalWin">
+          <td><input type="button" name="doit" value="Calculate"
+            onclick="
+            calculator.displayOutputS.value = Math.round(((Math.pow((calculator.displayInchS.value)/2, 2)* Math.PI) / calculator.displayS.value) * 100) / 100
+
+            calculator.displayOutputS.value = Math.round(((Math.pow((calculator.displayInchS.value)/2, 2)* Math.PI) / calculator.displayS.value) * 100) / 100;
+
+           calculator.displayOutputM.value = Math.round(((Math.pow((calculator.displayInchM.value)/2, 2)* Math.PI) / calculator.displayM.value) * 100) / 100;
+
+           calculator.displayOutputL.value = Math.round(((Math.pow((calculator.displayInchL.value)/2, 2)* Math.PI) / calculator.displayL.value) * 100) / 100;
+
+
+           google.charts.load('current', {'packages':['bar']});
+           google.charts.setOnLoadCallback(drawStuff);
+           swapCanvas();
+           "
+            ></td>
+       </tr>
+       <td><input type="button" id="myBtn" name="doit" value="Decide Winner"
+         ></td>
+       </div>
+      </form>
+      <div id="unicorn">Disclaimer: Typing "pizza" into this browser will spawn unicorns</div>
+      <div id="dual_x_div" ></div>
+
+
+      <div id="myModal" class="modal">
+  <!-- Modal content -->
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <p >The best option is to purchase the</p>
+        <div class="modal-text">
+          <p> $ </p>
+        <p id="modal-content"></p>
+        <p> </p>
+        </div>
+        <p>Pizza</p>
+      </div>
+
+      <audio id="audio" src="./MLGAirHorn.mp3" ></audio>
+
+<script>
+
+function play(){
+      const audio = document.getElementById("audio");
+      audio.volume = 0.01;
+      audio.play();
+                }
+
+  const pressedArray = []
+  const secretCode = 'pizza'
+window.addEventListener('keyup', (e)=>{
+  // console.log(e.key);//logs the key the user presses
+  pressedArray.push(e.key);
+  pressedArray.splice(-secretCode.length - 1, pressedArray.length - secretCode.length); //???
+
+  if (pressedArray.join("").includes(secretCode)){
+    console.log("YOU GOT THE SECRET CODE");
+    cornify_add();
+  }
+  // console.log(pressedArray);
+})
+      function bestPizza(){
+        const PizzaOptions = {}
+        const PriceS = calculator.displayS.value
+        const PriceM = calculator.displayM.value
+        const PriceL = calculator.displayL.value
+        const OutputS = calculator.displayOutputS.value
+        const OutputM = calculator.displayOutputM.value
+        const OutputL = calculator.displayOutputL.value
+        PizzaOptions[PriceS] = OutputS;
+        PizzaOptions[PriceM] = OutputM;
+        PizzaOptions[PriceL] = OutputL;
+
+        const keys = Object.keys(PizzaOptions)
+        const array = []
+        array.push(...Object.values(PizzaOptions));
+        let max = array.reduce(function(a,b){
+          return Math.max(a,b)
+        })
+
+        let result = Object.keys(PizzaOptions).find(key => {
+
+          if (Math.round(PizzaOptions[key], 2) === Math.round(max, 2)){
+            //The whole time the issue was the number printed to the dev tools was automatically rounded, and did not reprsent the actual number, so when we tested for equality, the two numbers were not equal.
+            // console.log(key);
+            return key
+          }
+        });
+        // console.log(result);
+        return result;
+      }
+
+
+      function displayBestOption(e){
+        console.log(e);
+        const div = document.getElementById('myBtn')
+        div.innerHTML = e
+      }
+
+      function drawStuff() {
+        const data = new google.visualization.arrayToDataTable([
+          ['Pizza Dimensions', 'Pizza Option 1 (S)','Pizza Option 2 (M)','Pizza Option 3 (L)' ],
+          ['Total Area(inches^2/1000)',
+          Math.round((Math.pow((calculator.displayInchS.value)/2, 2)* Math.PI) * 100 ) /1000,
+          Math.round((Math.pow((calculator.displayInchM.value)/2, 2)* Math.PI) * 100 ) /1000,
+          Math.round((Math.pow((calculator.displayInchL.value)/2, 2)* Math.PI) * 100 ) /1000,
+        ],
+          ['Price Per Slice(8) in $',
+          calculator.displayS.value / 8,
+          calculator.displayM.value / 8,
+          calculator.displayL.value / 8],
+          ['Output (inches^2 per $)',
+          calculator.displayOutputS.value,
+          calculator.displayOutputM.value,
+          calculator.displayOutputL.value
+        ],
+        ]);
+
+        const options = {
+          width: 800,
+          chart: {
+            title: 'Which Pizza is worth it?',
+            subtitle: 'Comparing the values between small, medium and large Pizzas'
+          },
+          bars: 'vertical', // Required for Material Bar Charts.
+          Axis: {format: 'decimal'},
+            height: 500,
+             colors: ['#1b9e77', '#d95f02', '#7570b3']
+        };
+      const chart = new google.charts.Bar(document.getElementById('dual_x_div'));
+      chart.draw(data, options);
+    };
+
+    // Get the modal
+    let modal = document.getElementById('myModal');
+
+    // Get the button that opens the modal
+    let btn = document.getElementById("myBtn");
+
+    // Get the <span> element that closes the modal
+    let span = document.getElementsByClassName("close")[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = "block";
+        const result = bestPizza();
+        const div = document.getElementById('modal-content')
+        div.innerHTML = result;
+        play();
+        // console.log(result);
+        // btn.innerHTML = result;
+        // console.log(btn.innerHTML);
+        // displayBestOption(bestPizza());
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+    function swapCanvas(){
+      canvas.style.visibility = 'visible';
+    }
+
+      let COLORS, Confetti, NUM_CONFETTI, PI_2, canvas, confetti, context, drawCircle, drawCircle2, drawCircle3, i, range, xpos;
+       NUM_CONFETTI = 40;
+       COLORS = [
+         [235, 90, 70],
+         [97, 189, 79],
+         [242, 214, 0],
+         [0, 121, 191],
+         [195, 119, 224]
+       ];
+       PI_2 = 2 * Math.PI;
+       canvas = document.getElementById("confeti");
+       canvas.style.visibility = 'hidden';
+       context = canvas.getContext("2d");
+       window.w = 0;
+       window.h = 0;
+       window.resizeWindow = function() {
+         window.w = canvas.width = window.innerWidth;
+         return window.h = canvas.height = window.innerHeight
+       };
+       window.addEventListener("resize", resizeWindow, !1);
+       window.onload = function() {
+         return setTimeout(resizeWindow, 0)
+       };
+       range = function(a, b) {
+         return (b - a) * Math.random() + a
+       };
+       drawCircle = function(a, b, c, d) {
+         context.beginPath();
+         context.moveTo(a, b);
+         context.bezierCurveTo(a - 17, b + 14, a + 13, b + 5, a - 5, b + 22);
+         context.lineWidth = 2;
+         context.strokeStyle = d;
+         return context.stroke()
+       };
+       drawCircle2 = function(a, b, c, d) {
+         context.beginPath();
+         context.moveTo(a, b);
+         context.lineTo(a + 6, b + 9);
+         context.lineTo(a + 12, b);
+         context.lineTo(a + 6, b - 9);
+         context.closePath();
+         context.fillStyle = d;
+         return context.fill()
+       };
+       drawCircle3 = function(a, b, c, d) {
+         context.beginPath();
+         context.moveTo(a, b);
+         context.lineTo(a + 5, b + 5);
+         context.lineTo(a + 10, b);
+         context.lineTo(a + 5, b - 5);
+         context.closePath();
+         context.fillStyle = d;
+         return context.fill()
+       };
+       xpos = 0.9;
+       document.onmousemove = function(a) {
+         return xpos = a.pageX / w
+       };
+       window.requestAnimationFrame = function() {
+         return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(a) {
+           return window.setTimeout(a, 5)
+         }
+       }();
+       Confetti = function() {
+         function a() {
+           this.style = COLORS[~~range(0, 5)];
+           this.rgb = "rgba(" + this.style[0] + "," + this.style[1] + "," + this.style[2];
+           this.r = ~~range(2, 6);
+           this.r2 = 2 * this.r;
+           this.replace()
+         }
+         a.prototype.replace = function() {
+           this.opacity = 0;
+           this.dop = 0.03 * range(1, 4);
+           this.x = range(-this.r2, w - this.r2);
+           this.y = range(-20, h - this.r2);
+           this.xmax = w - this.r;
+           this.ymax = h - this.r;
+           this.vx = range(0, 2) + 8 * xpos - 5;
+           return this.vy = 0.7 * this.r + range(-1, 1)
+         };
+         a.prototype.draw = function() {
+           let a;
+           this.x += this.vx;
+           this.y += this.vy;
+           this.opacity +=
+             this.dop;
+           1 < this.opacity && (this.opacity = 1, this.dop *= -1);
+           (0 > this.opacity || this.y > this.ymax) && this.replace();
+           if (!(0 < (a = this.x) && a < this.xmax)) this.x = (this.x + this.xmax) % this.xmax;
+           drawCircle(~~this.x, ~~this.y, this.r, this.rgb + "," + this.opacity + ")");
+           drawCircle3(0.5 * ~~this.x, ~~this.y, this.r, this.rgb + "," + this.opacity + ")");
+           return drawCircle2(1.5 * ~~this.x, 1.5 * ~~this.y, this.r, this.rgb + "," + this.opacity + ")")
+         };
+         return a
+       }();
+       confetti = function() {
+         let a, b, c;
+         c = [];
+         i = a = 1;
+         for (b = NUM_CONFETTI; 1 <= b ? a <= b : a >= b; i = 1 <= b ? ++a : --a) c.push(new Confetti);
+         return c
+       }();
+       window.step = function() {
+         let a, b, c, d;
+         requestAnimationFrame(step);
+         context.clearRect(0, 0, w, h);
+         d = [];
+         b = 0;
+         for (c = confetti.length; b < c; b++) a = confetti[b], d.push(a.draw());
+         return d
+       };
+         step();
+
+</script>
+</body>
+</html>
